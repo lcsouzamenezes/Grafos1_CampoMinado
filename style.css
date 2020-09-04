@@ -1,0 +1,44 @@
+body {
+  align-items: center;
+}
+
+div {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.box {
+  width: 20px;
+  height: 20px;
+  background-color: gray;
+  font-weight: bold;
+}
+
+.one {
+  color: blue;
+}
+
+.two {
+  color: green;
+}
+
+.three {
+  color: brown;
+}
+
+.four {
+  color: black;
+}
+
+.five {
+  color: yellow;
+}
+
+.six {
+  color: pink;
+}
+
+.seven {
+  color: orange;
+}
