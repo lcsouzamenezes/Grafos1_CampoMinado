@@ -1,44 +1,30 @@
-**!! Atenção: Renomeie o seu repositório para (Tema)_(NomeDoProjeto). !!** 
+# Campo minado
 
-Temas:
- - Grafos1
- - Grafos2
- - PD
- - D&C
- - Greed
- - Final 
- 
- **!! *Não coloque os nomes dos alunos no título do repositório*. Exemplo de título correto: Grafos2_Labirinto-do-Minotauro !!**
- 
- (Apague essa seção)
-
-# NomedoProjeto
-
-**Número da Lista**: X<br>
-**Conteúdo da Disciplina**: XXXXXXXXXX<br>
+**Número da Lista**: 1<br>
+**Conteúdo da Disciplina**: Grafos 1<br>
 
 ## Alunos
 |Matrícula | Aluno |
 | -- | -- |
-| xx/xxxxxx  |  xxxx xxxx xxxxx |
-| xx/xxxxxx  |  xxxx xxxx xxxxx |
+| 16/0026822  |  Djorkaeff Alexandre Vilela Pereira |
+| 16/0007763  |  Guilherme Siqueira Brandão |
 
 ## Sobre 
-Descreva os objetivos do seu projeto e como ele funciona. 
+O clássico jogo de campo minado.
 
 ## Screenshots
-Adicione 3 ou mais screenshots do projeto em funcionamento.
+TODO
 
 ## Instalação 
-**Linguagem**: xxxxxx<br>
-**Framework**: (caso exista)<br>
+**Linguagem**: Javascript & HTML<br>
+**Framework**: N/A<br>
 Descreva os pré-requisitos para rodar o seu projeto e os comandos necessários.
 
 ## Uso 
-Explique como usar seu projeto caso haja algum passo a passo após o comando de execução.
+Abra o index.html em qualquer navegador e estará pronto.
 
 ## Outros 
-Quaisquer outras informações sobre seu projeto podem ser descritas abaixo.
+N/A.
 
 
 
