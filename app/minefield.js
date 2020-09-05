@@ -21,17 +21,17 @@ function isValid(i, j) {
 }
 
 const floodFill = (i, j) => {
-  if (!isValid(i, j)) {
+  if (!isValid(i, j) || document.getElementById(`${ i }${ j }`).innerHTML === 'aberto') {
     return;
   }
 
   if (matrix[i][j] > 0) {
-    matrix[i][j] = 10;
+    document.getElementById(`${ i }${ j }`).innerHTML = 'aberto';
     return;
   }
 
   if (matrix[i][j] == 0) {
-    matrix[i][j] = 10;
+    document.getElementById(`${ i }${ j }`).innerHTML = 'aberto';
     floodFill(i, j - 1);
     floodFill(i, j + 1);
     floodFill(i - 1, j);
@@ -90,40 +90,9 @@ const getRandomBox = () => {
 
 let matrix = [];
 
-const onClick = ({ target }) => {
-  const x = target.getAttribute('x')
-  const y = target.getAttribute('y')
-  floodFill(parseInt(x), parseInt(y));
-  for (let i = 0; i < 9; i++) {
-    for (let j = 0; j < 9; j++) {
-      const div = document.createElement('div');
-      div.setAttribute('x', i);
-      div.setAttribute('y', j);
-      div.setAttribute('onclick', 'onClick(event)');
-      div.innerHTML = `${matrix[i][j]}|`;
-      field.appendChild(div);
-    }
-  }
-}
-
-class Cell {
-  count = random();
-  releved = false;
-
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-
-  get element() {
-    const div = document.createElement('div');
-    div.className = 'box';
-    div.innerHTML = count;
-  }
-
-  revel() {
-    this.releved = true;
-  }
+const onClick = (i, j) => {
+  console.log(i, j);
+  floodFill(parseInt(i), parseInt(j));
 }
 
 const start = ({ target }) => {
@@ -136,18 +105,20 @@ const start = ({ target }) => {
   // Populates the field
   for (let i = 0; i < 9; i++) {
     matrix[i] = [];
+    const row = document.createElement('tr');
     for (let j = 0; j < 9; j++) {
-      matrix[i][j] = 0;
+      const cell = document.createElement('td');
+      cell.setAttribute('onclick', `onClick(${ i }, ${ j })`);
+
+      const count = random();
+      cell.innerHTML = count;
+      row.appendChild(cell);
+
+      cell.setAttribute('id', `${ i }${ j }`);
+      cell.setAttribute('count', count);
+
+      matrix[i][j] = count;
     }
-  }
-  for (let i = 0; i < 9; i++) {
-    for (let j = 0; j < 9; j++) {
-      const div = document.createElement('div');
-      div.setAttribute('x', i);
-      div.setAttribute('y', j);
-      div.setAttribute('onclick', 'onClick(event)');
-      div.innerHTML = `${matrix[i][j]}|`;
-      field.appendChild(div);
-    }
+    field.appendChild(row);
   }
 };
