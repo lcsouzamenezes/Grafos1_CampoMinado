@@ -21,22 +21,31 @@ function isValid(i, j) {
 }
 
 const floodFill = (i, j) => {
+  console.log('matrix[i][j]', matrix[i][j])
   if (!isValid(i, j) || document.getElementById(`${ i }${ j }`).innerHTML === 'aberto') {
     return;
   }
 
-  if (matrix[i][j] > 0) {
-    document.getElementById(`${ i }${ j }`).innerHTML = 'aberto';
+  if (matrix[i][j] > 0 && matrix[i][j] != 8 ) {
+    document.getElementById(`${ i }${ j }`).innerHTML = matrix[i][j];
     return;
   }
 
   if (matrix[i][j] == 0) {
-    document.getElementById(`${ i }${ j }`).innerHTML = 'aberto';
+    document.getElementById(`${ i }${ j }`).innerHTML = matrix[i][j];
     floodFill(i, j - 1);
     floodFill(i, j + 1);
     floodFill(i - 1, j);
     floodFill(i + 1, j);
   }
+
+  if (matrix[i][j] == 8 ) {
+    document.getElementById(`${ i }${ j }`).innerHTML = '<img src=\"./assets/bomb.png\"></img>';
+    return;
+  }
+
+  div.setAttribute('oncontextmenu', 'flag(event)');
+
 }
 
 // Reveal a box
@@ -108,15 +117,14 @@ const start = ({ target }) => {
     const row = document.createElement('tr');
     for (let j = 0; j < 9; j++) {
       const cell = document.createElement('td');
+      cell.className = 'box';
       cell.setAttribute('onclick', `onClick(${ i }, ${ j })`);
-
       const count = random();
-      cell.innerHTML = count;
+      // cell.innerHTML = count;
       row.appendChild(cell);
-
       cell.setAttribute('id', `${ i }${ j }`);
       cell.setAttribute('count', count);
-
+      cell.setAttribute('oncontextmenu', 'flag(event)');
       matrix[i][j] = count;
     }
     field.appendChild(row);
