@@ -16,10 +16,33 @@ const random = () => Math.floor(Math.random() * 9);
 // Bomb is represented by 8
 const isBomb = value => value === '8';
 
+function isValid(i, j) {
+  return (i >= 0 && i < 9 && j >= 0 && j < 9);
+}
+
+const floodFill = (i, j) => {
+  if (!isValid(i, j)) {
+    return;
+  }
+
+  if (matrix[i][j] > 0) {
+    matrix[i][j] = 10;
+    return;
+  }
+
+  if (matrix[i][j] == 0) {
+    matrix[i][j] = 10;
+    floodFill(i, j - 1);
+    floodFill(i, j + 1);
+    floodFill(i - 1, j);
+    floodFill(i + 1, j);
+  }
+}
+
 // Reveal a box
 const reveal = ({ target }) => {
   const value = target.getAttribute('value');
-  target.className = `box ${ BOX[value] }`;
+  target.className = `box ${BOX[value]}`;
 
   // Bomb is represented by 8
   if (isBomb(value)) {
@@ -35,7 +58,7 @@ const reveal = ({ target }) => {
 }
 
 const flag = (event) => {
-  event.preventDefault();  
+  event.preventDefault();
 
   // Set as a flag box
   const { target } = event;
@@ -65,6 +88,44 @@ const getRandomBox = () => {
   return div;
 };
 
+let matrix = [];
+
+const onClick = ({ target }) => {
+  const x = target.getAttribute('x')
+  const y = target.getAttribute('y')
+  floodFill(parseInt(x), parseInt(y));
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      const div = document.createElement('div');
+      div.setAttribute('x', i);
+      div.setAttribute('y', j);
+      div.setAttribute('onclick', 'onClick(event)');
+      div.innerHTML = `${matrix[i][j]}|`;
+      field.appendChild(div);
+    }
+  }
+}
+
+class Cell {
+  count = random();
+  releved = false;
+
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  get element() {
+    const div = document.createElement('div');
+    div.className = 'box';
+    div.innerHTML = count;
+  }
+
+  revel() {
+    this.releved = true;
+  }
+}
+
 const start = ({ target }) => {
   // Hide the start button
   target.hidden = true;
@@ -73,8 +134,20 @@ const start = ({ target }) => {
   const field = document.getElementById('field');
 
   // Populates the field
-  [...new Array(FIELD_SIZE)].forEach(() => {
-    const child = getRandomBox();
-    field.appendChild(child);
-  });
+  for (let i = 0; i < 9; i++) {
+    matrix[i] = [];
+    for (let j = 0; j < 9; j++) {
+      matrix[i][j] = 0;
+    }
+  }
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      const div = document.createElement('div');
+      div.setAttribute('x', i);
+      div.setAttribute('y', j);
+      div.setAttribute('onclick', 'onClick(event)');
+      div.innerHTML = `${matrix[i][j]}|`;
+      field.appendChild(div);
+    }
+  }
 };
