@@ -11,12 +11,23 @@ const BOX = {
 
 const FIELD_SIZE = 500;
 
-const random = () => Math.floor(Math.random() * 8);
+const random = () => Math.floor(Math.random() * 9);
+
+// Bomb is represented by 8
+const isBomb = value => value === '8';
 
 // Reveal a box
 const reveal = ({ target }) => {
   const value = target.getAttribute('value');
   target.className = `box ${ BOX[value] }`;
+
+  // Bomb is represented by 8
+  if (isBomb(value)) {
+    target.innerHTML = '<img src=\"./assets/bomb.png\"></img>';
+    target.className = 'box';
+    return;
+  }
+
   // We don't want to show 0
   if (value > 0) {
     target.innerHTML = value;
