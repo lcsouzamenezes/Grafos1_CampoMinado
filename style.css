@@ -11,8 +11,20 @@ div {
 .box {
   width: 20px;
   height: 20px;
+  padding: 4px;
+  border: 1px solid;
+  border-color: black;
   background-color: gray;
   font-weight: bold;
+}
+
+#field {
+  width: 300px;
+  flex-wrap: wrap;
+}
+
+.zero {
+  opacity: .8;
 }
 
 .one {
