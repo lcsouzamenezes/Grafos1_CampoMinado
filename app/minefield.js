@@ -23,6 +23,18 @@ const reveal = ({ target }) => {
   }
 }
 
+const flag = (event) => {
+  event.preventDefault();  
+
+  // Set as a flag box
+  const { target } = event;
+  target.innerHTML = '<img src=\"./assets/flag.png\"></img>';
+  target.className = 'box';
+
+  // Don't show the current behavior
+  return false;
+}
+
 // Create a random box
 const getRandomBox = () => {
   const value = random();
@@ -33,7 +45,9 @@ const getRandomBox = () => {
   // Set the inner value
   div.setAttribute('value', value);
   // Set the onclick event that reveals a box
-  div.setAttribute('onclick', 'reveal(event)')
+  div.setAttribute('onclick', 'reveal(event)');
+  // Set the right click handler
+  div.setAttribute('oncontextmenu', 'flag(event)');
   // Set the className
   div.className = 'box';
 
