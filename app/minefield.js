@@ -1,47 +1,36 @@
 const FIELD_SIZE = 5;
 
-const floodFill = (i, j) => {
-  if (!isValid(i, j) || document.getElementById(`${ i }${ j }`).innerHTML === 'aberto') {
+const floodFill = (i, j, matrix) => {
+  if (!isValid(i, j)) {
     return;
   }
 
-  if (matrix[i][j] > 0 && matrix[i][j] != 8 ) {
-    document.getElementById(`${ i }${ j }`).innerHTML = matrix[i][j];
+  const element = document.getElementById(`${ i }${ j }`);
+  const open = element.getAttribute('open');
+
+  if (open) {
     return;
   }
 
-  if (matrix[i][j] == 0) {
-    reveal(i, j, m);
-    floodFill(i, j - 1);
-    floodFill(i, j + 1);
-    floodFill(i - 1, j);
-    floodFill(i + 1, j);
+  if (matrix[i][j] > 0 && matrix[i][j] !== -1) {
+    element.innerHTML = matrix[i][j];
+    element.setAttribute('open', true);
+    return;
+  }
+
+  if (matrix[i][j] === 0) {
+    element.setAttribute('open', true);
+    element.className = 'box zero';
+    floodFill(i, j - 1, matrix);
+    floodFill(i, j + 1, matrix);
+    floodFill(i - 1, j, matrix);
+    floodFill(i + 1, j, matrix);
   }
 
   if (matrix[i][j] == -1) {
-    document.getElementById(`${ i }${ j }`).innerHTML = '<img src=\"./assets/bomb.png\"></img>';
+    element.innerHTML = '<img src=\"./assets/bomb.png\"></img>';
     return;
   }
-}
-
-// Reveal a box
-const reveal = ({ target }) => {
-  const value = parseInt(target.getAttribute('value'));
-
-  // Has a bomb
-  if (value === -1) {
-    target.innerHTML = '<img src=\"./assets/bomb.png\"></img>';
-    return;
-  }
-
-  // Clean space
-  if (value === 0) {
-    target.className = 'box zero';
-    return;
-  }
-
-  // Set the neighbors count
-  target.innerHTML = value;
 }
 
 const flag = (event) => {
@@ -137,7 +126,8 @@ const start = ({ target }) => {
     const row = document.createElement('tr');
     for (let j = 0; j < FIELD_SIZE; j++) {
       const cell = document.createElement('td');
-      cell.setAttribute('onclick', 'reveal(event)');
+      cell.onclick = () => floodFill(i, j, matrix);
+      cell.setAttribute('id', `${ i }${ j }`);
       cell.setAttribute('value', matrix[i][j]);
       cell.className = 'box';
       row.appendChild(cell);
