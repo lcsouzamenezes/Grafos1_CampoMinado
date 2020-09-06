@@ -23,6 +23,8 @@ Descreva os pré-requisitos para rodar o seu projeto e os comandos necessários.
 ## Uso 
 Abra o index.html em qualquer navegador e estará pronto.
 
+Se preferir, acesse e jogue sem precisar clonar o repositório: https://projeto-de-algoritmos.github.io/Grafos1_CampoMinado/
+
 ## Outros 
 N/A.
 
