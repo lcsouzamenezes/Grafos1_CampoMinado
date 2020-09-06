@@ -89,6 +89,9 @@ const floodFill = (i, j, matrix) => {
       clearInterval(timer);
       timer = null;
     }
+    const status = document.getElementById('status');
+    status.innerHTML = 'Boom! Você perdeu!';
+    status.hidden = false;
     gameEnd = true;
     return;
   }
@@ -186,6 +189,9 @@ const start = ({ target }) => {
   // Get the field element
   const fieldElement = document.getElementById('field');
   fieldElement.innerHTML = '';
+  const status = document.getElementById('status');
+  status.innerHTML = '';
+  status.hidden = true;
   const matrix = field(5);
   startTimer();
 
