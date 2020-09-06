@@ -69,12 +69,44 @@ const floodFill = (i, j, matrix) => {
   if (matrix[i][j] > 0 && matrix[i][j] !== -1) {
     element.innerHTML = matrix[i][j];
     element.setAttribute('open', true);
+
+    const bombs = document.querySelectorAll('[value="-1"]');
+    const opened = document.querySelectorAll('[open="true"]');
+    if (bombs.length + opened.length === FIELD_SIZE * FIELD_SIZE) {
+      const status = document.getElementById('status');
+      status.innerHTML = 'Parabéns! Você venceu!';
+      status.hidden = false;
+      gameEnd = true;
+      const target = document.getElementById('start');
+      target.hidden = false;
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    }
+
     return;
   }
 
   if (matrix[i][j] === 0) {
     element.setAttribute('open', true);
     element.className = 'box zero';
+
+    const bombs = document.querySelectorAll('[value="-1"]');
+    const opened = document.querySelectorAll('[open="true"]');
+    if (bombs.length + opened.length === FIELD_SIZE * FIELD_SIZE) {
+      const status = document.getElementById('status');
+      status.innerHTML = 'Parabéns! Você venceu!';
+      status.hidden = false;
+      gameEnd = true;
+      const target = document.getElementById('start');
+      target.hidden = false;
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    }
+
     floodFill(i, j - 1, matrix);
     floodFill(i, j + 1, matrix);
     floodFill(i - 1, j, matrix);
