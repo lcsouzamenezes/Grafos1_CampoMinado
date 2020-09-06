@@ -1,27 +1,6 @@
-const BOX = {
-  0: 'zero',
-  1: 'one',
-  2: 'two',
-  3: 'three',
-  4: 'four',
-  5: 'five',
-  6: 'six',
-  7: 'seven'
-};
-
-const FIELD_SIZE = 500;
-
-const random = () => Math.floor(Math.random() * 9);
-
-// Bomb is represented by 8
-const isBomb = value => value === '8';
-
-function isValid(i, j) {
-  return (i >= 0 && i < 9 && j >= 0 && j < 9);
-}
+const FIELD_SIZE = 5;
 
 const floodFill = (i, j) => {
-  console.log('matrix[i][j]', matrix[i][j])
   if (!isValid(i, j) || document.getElementById(`${ i }${ j }`).innerHTML === 'aberto') {
     return;
   }
@@ -32,38 +11,37 @@ const floodFill = (i, j) => {
   }
 
   if (matrix[i][j] == 0) {
-    document.getElementById(`${ i }${ j }`).innerHTML = matrix[i][j];
+    reveal(i, j, m);
     floodFill(i, j - 1);
     floodFill(i, j + 1);
     floodFill(i - 1, j);
     floodFill(i + 1, j);
   }
 
-  if (matrix[i][j] == 8 ) {
+  if (matrix[i][j] == -1) {
     document.getElementById(`${ i }${ j }`).innerHTML = '<img src=\"./assets/bomb.png\"></img>';
     return;
   }
-
-  div.setAttribute('oncontextmenu', 'flag(event)');
-
 }
 
 // Reveal a box
 const reveal = ({ target }) => {
-  const value = target.getAttribute('value');
-  target.className = `box ${BOX[value]}`;
+  const value = parseInt(target.getAttribute('value'));
 
-  // Bomb is represented by 8
-  if (isBomb(value)) {
+  // Has a bomb
+  if (value === -1) {
     target.innerHTML = '<img src=\"./assets/bomb.png\"></img>';
-    target.className = 'box';
     return;
   }
 
-  // We don't want to show 0
-  if (value > 0) {
-    target.innerHTML = value;
+  // Clean space
+  if (value === 0) {
+    target.className = 'box zero';
+    return;
   }
+
+  // Set the neighbors count
+  target.innerHTML = value;
 }
 
 const flag = (event) => {
@@ -78,30 +56,72 @@ const flag = (event) => {
   return false;
 }
 
-// Create a random box
-const getRandomBox = () => {
-  const value = random();
-  const div = document.createElement('div');
-
-  // Start as closed
-  div.setAttribute('open', false);
-  // Set the inner value
-  div.setAttribute('value', value);
-  // Set the onclick event that reveals a box
-  div.setAttribute('onclick', 'reveal(event)');
-  // Set the right click handler
-  div.setAttribute('oncontextmenu', 'flag(event)');
-  // Set the className
-  div.className = 'box';
-
-  return div;
-};
-
-let matrix = [];
-
 const onClick = (i, j) => {
-  console.log(i, j);
   floodFill(parseInt(i), parseInt(j));
+}
+
+const random = (max) => Math.floor((Math.random() * 1000) + 1) % max;
+
+const isValid = (x, y) => x >= 0 && x < FIELD_SIZE && y >=0 && y < FIELD_SIZE;
+
+const hasBomb = (x, y, m) => isValid(x, y) && m[x][y] === -1;
+
+const neighbors = (x, y, m) => {
+  let n = 0;
+  if (hasBomb(x - 1, y - 1, m)) {
+    n++;
+  }
+  if (hasBomb(x, y - 1, m)) {
+    n++;
+  }
+  if (hasBomb(x + 1, y - 1, m)) {
+    n++;
+  }
+  if (hasBomb(x - 1, y, m)) {
+    n++;
+  }
+  if (hasBomb(x + 1, y, m)) {
+    n++;
+  }
+  if (hasBomb(x - 1, y + 1, m)) {
+    n++;
+  }
+  if (hasBomb(x, y + 1, m)) {
+    n++;
+  }
+  if (hasBomb(x + 1, y + 1, m)) {
+    n++;
+  }
+  return n;
+}
+
+const field = (max) => {
+  let n = 0;
+  let m = [];
+  for (let i = 0; i < FIELD_SIZE; i++) {
+    m[i] = [];
+    for (let j = 0; j < FIELD_SIZE; j++) {
+      m[i][j] = 0;
+    }
+  }
+
+  while (n < max) {
+    const x = random(FIELD_SIZE);
+    const y = random(FIELD_SIZE);
+
+    m[x][y] = -1;
+    n++;
+  }
+
+  for (let i = 0; i < FIELD_SIZE; i++) {
+    for (let j = 0; j < FIELD_SIZE; j++) {
+      if (m[i][j] !== -1) {
+        m[i][j] = neighbors(i, j, m);
+      }
+    }
+  }
+
+  return m;
 }
 
 const start = ({ target }) => {
@@ -109,24 +129,19 @@ const start = ({ target }) => {
   target.hidden = true;
 
   // Get the field element
-  const field = document.getElementById('field');
+  const fieldElement = document.getElementById('field');
+  const matrix = field(5);
 
   // Populates the field
-  for (let i = 0; i < 9; i++) {
-    matrix[i] = [];
+  for (let i = 0; i < FIELD_SIZE; i++) {
     const row = document.createElement('tr');
-    for (let j = 0; j < 9; j++) {
+    for (let j = 0; j < FIELD_SIZE; j++) {
       const cell = document.createElement('td');
+      cell.setAttribute('onclick', 'reveal(event)');
+      cell.setAttribute('value', matrix[i][j]);
       cell.className = 'box';
-      cell.setAttribute('onclick', `onClick(${ i }, ${ j })`);
-      const count = random();
-      // cell.innerHTML = count;
       row.appendChild(cell);
-      cell.setAttribute('id', `${ i }${ j }`);
-      cell.setAttribute('count', count);
-      cell.setAttribute('oncontextmenu', 'flag(event)');
-      matrix[i][j] = count;
     }
-    field.appendChild(row);
+    fieldElement.appendChild(row);
   }
 };
