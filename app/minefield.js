@@ -127,6 +127,7 @@ const start = ({ target }) => {
     for (let j = 0; j < FIELD_SIZE; j++) {
       const cell = document.createElement('td');
       cell.onclick = () => floodFill(i, j, matrix);
+      cell.oncontextmenu = (event) => flag(event);
       cell.setAttribute('id', `${ i }${ j }`);
       cell.setAttribute('value', matrix[i][j]);
       cell.className = 'box';
