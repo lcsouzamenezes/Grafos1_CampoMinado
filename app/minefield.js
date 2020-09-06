@@ -1,6 +1,11 @@
+let gameEnd = false;
 const FIELD_SIZE = 5;
 
 const floodFill = (i, j, matrix) => {
+  if (gameEnd) {
+    return;
+  }
+
   if (!isValid(i, j)) {
     return;
   }
@@ -29,11 +34,18 @@ const floodFill = (i, j, matrix) => {
 
   if (matrix[i][j] == -1) {
     element.innerHTML = '<img src=\"./assets/bomb.png\"></img>';
+    const target = document.getElementById('start');
+    target.hidden = false;
+    gameEnd = true;
     return;
   }
 }
 
 const flag = (event) => {
+  if (gameEnd) {
+    return;
+  }
+
   event.preventDefault();
 
   // Set as a flag box
@@ -114,11 +126,13 @@ const field = (max) => {
 }
 
 const start = ({ target }) => {
+  gameEnd = false;
   // Hide the start button
   target.hidden = true;
 
   // Get the field element
   const fieldElement = document.getElementById('field');
+  fieldElement.innerHTML = '';
   const matrix = field(5);
 
   // Populates the field
