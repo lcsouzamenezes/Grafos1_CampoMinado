@@ -11,14 +11,21 @@
 	<div>
 		<h1>Campo Minado</h1>
 	</div>
-	<h1 id="status" hidden></h1>
+	<h1 id="status" hidden style="text-align: center;"></h1>
 	<div id="timer"></div>
-	<div>
+	<br/>
+	<div id="options" style="margin: 0 auto; display: block; text-align: center;">
+		<form id="difficulty">
+			<input type="radio" name="difficulty" value="iniciante"> Iniciante<br>
+			<input type="radio" name="difficulty" value="intermediario"> Intermediário<br>
+			<input type="radio" name="difficulty" value="experiente"> Experiente
+		  </form>
+		<br/>
 		<button id="start" onclick="start(event);">
 			Iniciar
 		</button>
 	</div>
-	<table>
+	<table style="margin: 0 auto;">
 		<tbody id="field"></tbody>
 	</table>
 </body>

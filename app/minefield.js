@@ -1,7 +1,6 @@
 let timer;
 let gameEnd = false;
-const FIELD_SIZE = 5;
-
+var FIELD_SIZE = 5;
 const TIMER = {
   days: 'd',
   hours: 'h',
@@ -75,6 +74,7 @@ const floodFill = (i, j, matrix) => {
     if (bombs.length + opened.length === FIELD_SIZE * FIELD_SIZE) {
       const status = document.getElementById('status');
       status.innerHTML = 'Parabéns! Você venceu!';
+      document.getElementById('options').style.display = 'block';
       status.hidden = false;
       gameEnd = true;
       const target = document.getElementById('start');
@@ -122,6 +122,7 @@ const floodFill = (i, j, matrix) => {
       timer = null;
     }
     const status = document.getElementById('status');
+    document.getElementById('options').style.display = 'block';
     status.innerHTML = 'Boom! Você perdeu!';
     status.hidden = false;
     gameEnd = true;
@@ -217,6 +218,25 @@ const start = ({ target }) => {
   gameEnd = false;
   // Hide the start button
   target.hidden = true;
+  document.getElementById('options').style.display = 'none';
+  var radios = document.getElementsByName('difficulty');
+  var numberOfBombs = 0;
+  for (let i = 0; i < radios.length; i++) {
+    if (radios[i].checked) {
+        if(radios[i].value == "iniciante"){
+          FIELD_SIZE = 10
+          numberOfBombs = 10
+        }
+        if(radios[i].value == "intermediario"){
+          FIELD_SIZE = 15
+          numberOfBombs = 20
+        }
+        if(radios[i].value == "experiente"){
+          FIELD_SIZE = 15
+          numberOfBombs = 30
+        }  
+    }  
+  }
 
   // Get the field element
   const fieldElement = document.getElementById('field');
@@ -224,9 +244,8 @@ const start = ({ target }) => {
   const status = document.getElementById('status');
   status.innerHTML = '';
   status.hidden = true;
-  const matrix = field(5);
+  const matrix = field(numberOfBombs);
   startTimer();
-
   // Populates the field
   for (let i = 0; i < FIELD_SIZE; i++) {
     const row = document.createElement('tr');
