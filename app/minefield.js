@@ -1,5 +1,54 @@
+let timer;
 let gameEnd = false;
 const FIELD_SIZE = 5;
+
+const TIMER = {
+  days: 'd',
+  hours: 'h',
+  minutes: 'm',
+  seconds: 's'
+};
+
+const timerCalc = (time) => {
+  const days = Math.floor(time / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((time % (1000 * 60)) / 1000);
+
+  return {
+      days,
+      hours,
+      minutes,
+      seconds
+  };
+}
+
+// Handle minefield timer
+const startTimer = () => {
+  const startTime = new Date();
+
+  const updateTimer = () => {
+      const currentTime = new Date();
+      const time = currentTime - startTime;
+      const timer = timerCalc(time);
+
+      const value = Object.entries(timer)
+          .map(([k, v]) => {
+              // If it's a valid value
+              if (v > 0) {
+                  return `${v}${TIMER[k]}`;
+              }
+              return false;
+          })
+          .filter(v => v)
+          .join(' ');
+
+      document.getElementById('timer').innerHTML = value;
+  }
+
+  // 1 second interval
+  timer = window.setInterval(updateTimer, 1000);
+}
 
 const floodFill = (i, j, matrix) => {
   if (gameEnd) {
@@ -36,6 +85,10 @@ const floodFill = (i, j, matrix) => {
     element.innerHTML = '<img src=\"./assets/bomb.png\"></img>';
     const target = document.getElementById('start');
     target.hidden = false;
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
     gameEnd = true;
     return;
   }
@@ -134,6 +187,7 @@ const start = ({ target }) => {
   const fieldElement = document.getElementById('field');
   fieldElement.innerHTML = '';
   const matrix = field(5);
+  startTimer();
 
   // Populates the field
   for (let i = 0; i < FIELD_SIZE; i++) {
