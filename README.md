@@ -13,7 +13,8 @@
 O clássico jogo de campo minado.
 
 ## Screenshots
-TODO
+![](https://raw.githubusercontent.com/projeto-de-algoritmos/Grafos1_CampoMinado/master/docs/screenshot1.png)
+![](https://raw.githubusercontent.com/projeto-de-algoritmos/Grafos1_CampoMinado/master/docs/screenshot2.png)
 
 ## Instalação 
 **Linguagem**: Javascript & HTML<br>
